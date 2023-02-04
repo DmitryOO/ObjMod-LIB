@@ -86,14 +86,95 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/js/customizator.js":
+/*!********************************!*\
+  !*** ./src/js/customizator.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Customizator; });
+class Customizator {
+  constructor() {
+    this.btnBlock = document.createElement('div');
+    this.colorPicker = document.createElement('input');
+    this.btnBlock.addEventListener('click', e => this.onScaleChange(e));
+    this.colorPicker.addEventListener('input', e => this.onColorChange(e));
+  }
+
+  onScaleChange(e) {
+    let scale;
+    const body = document.querySelector('body');
+    scale = +e.target.value.replace(/x/g, '');
+
+    function recursy(elem) {
+      elem.childNodes.forEach(node => {
+        if (node.nodeName === "#text" && node.nodeValue.replace(/\s+/g, "").length > 0) {
+          if (!node.parentNode.getAttribute('data-fz')) {
+            let value = window.getComputedStyle(node.parentNode, null).fontSize;
+            node.parentNode.setAttribute('data-fz', +value.replace(/px/g, ''));
+            node.parentNode.style.fontSize = node.parentNode.getAttribute('data-fz') * scale + 'px';
+          } else {
+            node.parentNode.style.fontSize = node.parentNode.getAttribute('data-fz') * scale + 'px';
+          }
+
+          ;
+        } else {
+          recursy(node);
+        }
+      });
+    }
+
+    recursy(body);
+  }
+
+  onColorChange(e) {
+    const body = document.querySelector('body');
+    body.style.backgroundColor = e.target.value;
+    console.log(e.target.value);
+  }
+
+  render() {
+    let scaleInputS = document.createElement('input'),
+        scaleInputM = document.createElement('input'),
+        panel = document.createElement('div');
+    panel.append(this.btnBlock, this.colorPicker);
+    scaleInputS.classList.add('scale_btn');
+    scaleInputM.classList.add('scale_btn');
+    this.btnBlock.classList.add('scale');
+    this.colorPicker.classList.add('color');
+    scaleInputM.setAttribute('type', 'button');
+    scaleInputS.setAttribute('type', 'button');
+    scaleInputS.setAttribute('value', '1x');
+    scaleInputM.setAttribute('value', '1.5x');
+    this.colorPicker.setAttribute('type', 'color');
+    this.colorPicker.setAttribute('value', '#ffffff');
+    this.btnBlock.append(scaleInputS, scaleInputM);
+    panel.classList.add('panel');
+    document.querySelector('body').append(panel);
+  }
+
+}
+
+/***/ }),
+
 /***/ "./src/js/main.js":
 /*!************************!*\
   !*** ./src/js/main.js ***!
   \************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _customizator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./customizator */ "./src/js/customizator.js");
 
+window.addEventListener('DOMContentLoaded', () => {
+  const panel = new _customizator__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  panel.render();
+});
 
 /***/ })
 
